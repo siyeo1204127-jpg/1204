@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>逢甲大學視覺設計與 AI Prompt 共享中心</title>
+    <style>
+        :root {
+            --fcu-red: #A6192E;
+            --fcu-dark-red: #801222;
+            --bg-gray: #F8F9FA;
+            --card-bg: #FFFFFF;
+            --text-main: #2C3E50;
+            --text-sub: #6C757D;
+            --border-color: #E9ECEF;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-gray);
+            color: var(--text-main);
+            margin: 0;
+            padding: 30px 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1080px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding-bottom: 25px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        header h1 {
+            color: var(--fcu-red);
+            font-size: 28px;
+            margin: 0 0 10px 0;
+            font-weight: 700;
+        }
+
+        header p {
+            color: var(--text-sub);
+            font-size: 15px;
+            margin: 0;
+        }
+
+        /* 導覽與篩選列 */
+        .filter-nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: #FFFFFF;
+            border: 1px solid #CED4DA;
+            color: var(--text-main);
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--fcu-red);
+            color: #FFFFFF;
+            border-color: var(--fcu-red);
+            box-shadow: 0 2px 8px rgba(166, 25, 46, 0.25);
+        }
+
+        /* 卡片網格 */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .tag {
+            display: inline-block;
+            background-color: #F1F3F5;
+            color: #495057;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            align-self: flex-start;
+        }
+
+        .card h3 {
+            margin: 0 0 8px 0;
+            font-size: 18px;
+            color: var(--text-main);
+        }
+
+        .card p {
+            color: var(--text-sub);
+            font-size: 13.5px;
+            margin: 0 0 16px 0;
+            min-height: 40px;
+        }
+
+        /* Prompt 提示框 */
+        .prompt-container {
+            position: relative;
+            background-color: #212529;
+            color: #F8F9FA;
+            border-radius: 8px;
+            padding: 12px 14px;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            word-break: break-word;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px 0;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            border: none;
+            transition: background 0.2s ease;
+        }
+
+        .btn-copy {
+            background-color: var(--fcu-red);
+            color: #FFFFFF;
+        }
+
+        .btn-copy:hover {
+            background-color: var(--fcu-dark-red);
+        }
+
+        .btn-canva {
+            background-color: #00C4CC;
+            color: #FFFFFF;
+        }
+
+        .btn-canva:hover {
+            background-color: #00A3A8;
+        }
+
+        /* 頁尾說明 */
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            color: var(--text-sub);
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>逢甲大學視覺設計與 AI Prompt 共享中心</h1>
+        <p>告別過度二次元與審美疲勞！一鍵複製精準 AI 提示詞與校園標準 Canva 套版</p>
+    </header>
+
+    <!-- 分類按鈕 -->
+    <div class="filter-nav">
+        <button class="filter-btn active" onclick="filterCards('all')">全部分類</button>
+        <button class="filter-btn" onclick="filterCards('academic')">📚 講座與演講</button>
+        <button class="filter-btn" onclick="filterCards('admin')">📢 獎助學金類</button>
+        <button class="filter-btn" onclick="filterCards('other')">🎨 其他分類 (僅提供提示詞)</button>
+    </div>
+
+    <!-- 卡片展示區 -->
+    <div class="grid" id="cardGrid">
+
+        <!-- 1. 講座與演講（有Canva連結 + Prompt） -->
+        <div class="card" data-category="academic">
+            <div>
+                <span class="tag">📚 講座演講 / 現代文青插畫</span>
+                <h3>學術講座與跨領域學習</h3>
+                <p>適合跨領域講座、大師論壇、研討會。線條簡約、莫蘭迪色調，不搶文字風彩。</p>
+                <div class="prompt-container" id="p1">極簡雜誌風格扁平向量插畫，一名大學生在現代明亮的大學圖書館裡專注學習，現代乾淨幾何風格，柔和莫蘭迪色調，上方預留大面積乾淨背景用於放置文字，畫面無任何文字，無動漫漫畫風格。</div>
+            </div>
+            <div class="card-actions">
+                <button class="btn btn-copy" onclick="copyPrompt('p1', this)">複製中文 Prompt</button>
+                <a href="https://canva.link/b2k70e2gcibz7dd" target="_blank" class="btn btn-canva">開啟 Canva 套版</a>
+            </div>
+        </div>
+
+        <!-- 2. 獎助學金類（有Canva連結 + Prompt） -->
+        <div class="card" data-category="admin">
+            <div>
+                <span class="tag">📢 獎助學金 / 真實攝影質感</span>
+                <h3>清寒助學金與希望校園</h3>
+                <p>適合獎助學金、行政公告、重要通知。極簡自然光影攝影，預留下方大面積圖卡空間。</p>
+                <div class="prompt-container" id="p2">真實校園攝影風格，一名大學生自信地走在大學校園的綠蔭步道上，自然陽光與柔和逆光，背景適度模糊，下方留有寬敞乾淨的空間用於放置文字圖卡，整體視覺極簡、溫暖、具信任感，非插畫風格。</div>
+            </div>
+            <div class="card-actions">
+                <button class="btn btn-copy" onclick="copyPrompt('p2', this)">複製中文 Prompt</button>
+                <a href="https://canva.link/e2xu8uee6oaht84" target="_blank" class="btn btn-canva">開啟 Canva 套版</a>
+            </div>
+        </div>
+
+        <!-- 3. 其他分類：社團招募（僅 Prompt） -->
+        <div class="card" data-category="other">
+            <div>
+                <span class="tag">🏀 其他分類 / 活力向量風格</span>
+                <h3>社團與校隊招募</h3>
+                <p>適合校隊招募、體育競賽、社團活動。避開肢體變形與過度濃厚的日系二次元動漫感。</p>
+                <div class="prompt-container" id="p3">現代扁平向量插畫，一群展現活力的台灣大學生在綠意盎然的大學校園草地上進行體育活動，現代簡約風格，顏色優雅不俗套，畫面上方留出大片藍天背景空間，無圖片文字，無二次元漫畫感。</div>
+            </div>
+            <div class="card-actions">
+                <button class="btn btn-copy" onclick="copyPrompt('p3', this)">複製中文 Prompt</button>
+            </div>
+        </div>
+
+        <!-- 4. 其他分類：藝文展覽（僅 Prompt） -->
+        <div class="card" data-category="other">
+            <div>
+                <span class="tag">🎭 其他分類 / 簡約藝文風格</span>
+                <h3>工作坊與藝文展演</h3>
+                <p>適合藝術展覽、創意工作坊、學生作品展。色塊洗練，營造高雅濃厚的藝文氛圍。</p>
+                <div class="prompt-container" id="p4">現代藝文雜誌風格插畫，抽象極簡幾何幾何塊面，優雅柔和的配色，背景乾淨明亮，右側留出大面積空白空間供標題排版，呈現高質感的設計雜誌風格，無二次元動漫元素。</div>
+            </div>
+            <div class="card-actions">
+                <button class="btn btn-copy" onclick="copyPrompt('p4', this)">複製中文 Prompt</button>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>© 逢甲大學 視覺設計與資訊看板管理團隊 | 建議使用 Google Chrome 瀏覽獲得最佳體驗</p>
+    </footer>
+</div>
+
+<script>
+    // 複製 Prompt 功能
+    function copyPrompt(id, btnElement) {
+        const text = document.getElementById(id).innerText;
+        navigator.clipboard.writeText(text).then(() => {
+            const originalText = btnElement.innerText;
+            btnElement.innerText = "✓ 已複製！";
+            btnElement.style.backgroundColor = "#27AE60";
+            
+            setTimeout(() => {
+                btnElement.innerText = originalText;
+                btnElement.style.backgroundColor = "";
+            }, 1800);
+        });
+    }
+
+    // 分類篩選功能
+    function filterCards(category) {
+        const buttons = document.querySelectorAll('.filter-btn');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            if (category === 'all' || card.getAttribute('data-category') === category) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
